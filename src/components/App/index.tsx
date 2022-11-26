@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./styles.m.styl";
 import Navbar from "../Navbar";
 import OrdersList from "../../screens/Orders/List";
@@ -9,6 +9,9 @@ import OrdersShow from "~/screens/Orders/Show";
 function Index(): JSX.Element {
   const [globalState] = React.useState(new GlobalState());
   if (window.location.pathname === "/") window.location.pathname = "/orders/";
+  useEffect(()=>{
+    globalState.initialize()
+  },[])
 
   return (
     <GlobalStateProvider value={globalState}>

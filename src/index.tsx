@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './components/App'
 import reportWebVitals from './reportWebVitals'
+import { Provider } from 'urql'
+import client from './api/gql'
 
 ReactDOM.render(
+  <Provider value={client}>
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
+  </React.StrictMode>
+  </Provider>,
   document.getElementById('root')
 )
 

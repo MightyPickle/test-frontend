@@ -11,6 +11,7 @@ import { makeAutoObservable } from "mobx";
 type Status = null | Promise<any> | true;
 
 export class GlobalState {
+  initialized = false;
   data: {
     orderStatuses: CrmType[];
     deliveryTypes: CrmType[];
@@ -67,6 +68,19 @@ export class GlobalState {
     if (this.status.deliveryTypes === null) {
     }
     return this.data.deliveryTypes;
+  }
+
+  async initialize() {
+    if (this.initialized) return;
+    client.query( DELIVERY_TYPES_QUERY ).toPromise()
+    .then((res)=> this.setDeliveryTypes(res.data.deliveryTypes))
+
+    client.query( PRODUCT_STATUSES_QUERY ).toPromise()
+    .then((res)=> this.setProductStatuses(res.data.productStatuses))
+
+    
+    
+    this.initialized = true;
   }
 }
 

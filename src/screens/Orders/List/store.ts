@@ -46,14 +46,14 @@ export default class OrdersListState {
     if (this.page >= this.totalPages) return;
     this.setPage(this.page + 1);
     this.loading = true;
-    this.loadOrders();
+    this.loadOrders(this.page);
   }
 
   prevPage(): void {
     if (this.page <= 1) return;
     this.setPage(this.page - 1);
     this.loading = true;
-    this.loadOrders();
+    this.loadOrders(this.page);
   }
 
   setTotalPages(totalPages: number): void {
@@ -68,14 +68,18 @@ export default class OrdersListState {
     return this.page > 1;
   }
 
-  async loadOrders() {
+  async loadOrders(page: number) {
     this.loading = true;
+    const res = await client.query( GET_ORDERS_QUERY, {page} ).toPromise()
+    const {orders, pagination} = res.data.getOrders
+    this.setOrders(orders)    
+    this.setTotalPages(pagination.totalPageCount)
     this.loading = false;
   }
 
   initialize() {
     if (this.initialized) return;
     this.initialized = true;
-    this.loadOrders();
+    this.loadOrders(1);
   }
 }
